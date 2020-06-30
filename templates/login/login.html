@@ -1,0 +1,87 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- 上述meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <!-- Bootstrap CSS -->
+{#    <link href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">#}
+      <link href="{% static 'login/css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <link href="{% static 'login/css/login.css' %}" rel="stylesheet"/>
+    <title>登录</title>
+  </head>
+  <body>
+    <div class="container">
+            <div class="col">
+              <form class="form-login" action="/login/" method="post">
+              {% if login_form.captcha.errors %}
+                  <div class="alert alert-warning">{{ login_form.captcha.errors }}</div>
+              {%  elif message %}
+                  <div class="alert alert-warning">{{ message }}</div>
+                  {% endif %}
+
+                  {% csrf_token %}
+                  <h3 class="text-center">欢迎登录</h3>
+
+{#                    {{ login_form }}#}
+              <div class="form-group">
+                  {{ login_form.username.label_tag }}
+                  {{ login_form.username }}
+              </div>
+              <div class="'from-group">
+                  {{ login_form.password.label_tag }}
+                  {{ login_form.password }}
+              </div>
+              <div >
+                  {{ login_form.captcha.label_tag }}<br>
+                  {{ login_form.captcha }}
+              </div>
+{#                  <div class="form-group">#}
+{#                    <label for="id_username">用户名：</label>#}
+{#                    <input type="text" name='username' class="form-control" id="id_username" placeholder="Username" autofocus required>#}
+{#                  </div>#}
+{#                  <div class="form-group">#}
+{#                    <label for="id_password">密码：</label>#}
+{#                    <input type="password" name='password' class="form-control" id="id_password" placeholder="Password" required>#}
+{#                  </div>#}
+{#              注释部分是采用非表单形式获得用户名和密码#}
+                  <div>
+                  <a href="/register/" class="text-success "><ins>新用户注册</ins></a>
+                  <button type="submit" class="btn btn-primary float-right">登录</button>
+                  </div>
+
+              </form>
+            </div>
+    </div> <!-- /container -->
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    {#    以下三者的引用顺序是固定的#}
+    <script src="C:/Users/Administrator/PycharmProjects/login_system/login/static/login/js/jquery.js"></script>
+    <script src="C:/Users/Administrator/PycharmProjects/login_system/login/static/login/js/popper.js"></script>
+    <script src="C:/Users/Administrator/PycharmProjects/login_system/login/static/login/js/bootstrap.min.js"></script>
+  </body>
+</html>
+
+ <script src="https://cdn.bootcss.com/jquery/1.12.3/jquery.min.js"></script>
+    <script>
+     //点击刷新验证码
+    $(function () {
+        $('.captcha').css({
+            'cursor': 'pointer'
+        });
+        // ajax刷新
+        $('.captcha').click(function () {
+            console.log('click');
+            $.get("{% url 'captcha-refresh' %}",
+                function (result) {
+                    $('.captcha').attr('src', result['image_url']);
+                    $('#id_captcha_0').val(result['key'])
+                });
+        });
+    })
+</script>
